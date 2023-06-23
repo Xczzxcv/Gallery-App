@@ -1,0 +1,14 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Bootstrap.unity
+    guid: 71ba5de56a9e36743b068726d4c6c4f5
+  m_configObjects:
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 23bef4ac11ae86a4485c97a9122d3653, type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: bcda0c1b4978fae40a53d0bd91cd0d98, type: 2}
+    com.unity.addressableassets: {fileID: 11400000, guid: 248938721a2a4a0419afc3828755349b, type: 2}
