@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+﻿using Ui;
+using UnityEngine;
 
+namespace Infrastructure.SceneLocators
+{
 internal class GallerySceneLocator : MonoBehaviour
 {
     [field: SerializeField]
@@ -8,4 +11,5 @@ internal class GallerySceneLocator : MonoBehaviour
     public GalleryImagesProvider GalleryImagesProvider { get; private set; }
     [field: SerializeField]
     public GalleryImagesFactory GalleryImagesFactory { get; private set; }
+}
 }

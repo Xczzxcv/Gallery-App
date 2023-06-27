@@ -1,6 +1,8 @@
 using Infrastructure.GameStates;
 using UnityEngine;
 
+namespace Infrastructure
+{
 internal class Bootstrap : MonoBehaviour
 {
     [SerializeField]
@@ -17,4 +19,5 @@ internal class Bootstrap : MonoBehaviour
         var gameStateMachine = new GameStateMachine(resourcesLocator, inputController);
         gameStateMachine.EnterState<BootstrapGameState>();
     }
+}
 }

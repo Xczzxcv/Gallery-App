@@ -1,4 +1,7 @@
-﻿namespace Infrastructure.GameStates
+﻿using Ext;
+using Infrastructure.SceneLocators;
+
+namespace Infrastructure.GameStates
 {
 internal class GalleryGameState : IState
 {

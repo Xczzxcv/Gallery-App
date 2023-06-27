@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+﻿using Ui;
+using UnityEngine;
 
+namespace Infrastructure
+{
 internal class GalleryImagesFactory : MonoBehaviour, IGalleryImagesFactory
 {
     [SerializeField]
@@ -12,4 +15,5 @@ internal class GalleryImagesFactory : MonoBehaviour, IGalleryImagesFactory
 
         return galleryImage;
     }
+}
 }

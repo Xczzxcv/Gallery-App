@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
+namespace Infrastructure
+{
 internal class InputController : MonoBehaviour, IInputProvider
 {
     public event Action BackBtnPress;
@@ -12,4 +14,5 @@ internal class InputController : MonoBehaviour, IInputProvider
             BackBtnPress?.Invoke();
         }
     }
+}
 }

@@ -3,6 +3,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 
+namespace Infrastructure
+{
 internal class GalleryImagesProvider : MonoBehaviour, IGalleryImagesProvider
 {
     private struct ImageLoadInfo
@@ -72,4 +74,5 @@ internal class GalleryImagesProvider : MonoBehaviour, IGalleryImagesProvider
             imgLoadedCallback?.Invoke(sprite);
         }
     }
+}
 }

@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+namespace Ui
+{
 internal class GalleryImageView : UIBehaviour
 {
     [SerializeField]
@@ -34,4 +36,5 @@ internal class GalleryImageView : UIBehaviour
     {
         ExitBtnClick?.Invoke();
     }
+}
 }

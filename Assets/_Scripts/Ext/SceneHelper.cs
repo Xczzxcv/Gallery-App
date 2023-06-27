@@ -2,6 +2,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+namespace Ext
+{
 internal static class SceneHelper
 {
     public static T GetRootComponent<T>(Scene scene = default) where T : Component
@@ -23,4 +25,5 @@ internal static class SceneHelper
 
         throw new Exception($"Can't find {nameof(T)}");
     }
+}
 }

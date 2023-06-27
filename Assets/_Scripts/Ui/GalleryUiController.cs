@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using Infrastructure;
 using Infrastructure.GameStates;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+namespace Ui
+{
 internal class GalleryUiController : UIBehaviour
 {
     [SerializeField]
@@ -124,4 +127,5 @@ internal class GalleryUiController : UIBehaviour
             GalleryImage = clickedImage,
         });
     }
+}
 }

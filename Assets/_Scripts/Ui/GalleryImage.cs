@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+namespace Ui
+{
 internal class GalleryImage : UIBehaviour
 {
     private enum State
@@ -60,4 +62,5 @@ internal class GalleryImage : UIBehaviour
             _state = State.Seen;
         }
     }
+}
 }

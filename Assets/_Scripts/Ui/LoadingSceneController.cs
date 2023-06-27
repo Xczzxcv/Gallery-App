@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Screen = UnityEngine.Device.Screen;
 
+namespace Ui
+{
 internal class LoadingSceneController : MonoBehaviour
 {
     [SerializeField]
@@ -39,4 +40,5 @@ internal class LoadingSceneController : MonoBehaviour
         SceneManager.SetActiveScene(sceneInstance.Scene);
         callback?.Invoke();
     }
+}
 }
