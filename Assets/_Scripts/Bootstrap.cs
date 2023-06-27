@@ -5,13 +5,16 @@ internal class Bootstrap : MonoBehaviour
 {
     [SerializeField]
     private ResourcesLocator resourcesLocator;
-
     [SerializeField]
-    private CoroutineRunner coroutineRunner;
+    private InputController inputController;
+    [SerializeField]
+    private Transform common;
     
     private void Start()
     {
-        var gameStateMachine = new GameStateMachine(resourcesLocator, coroutineRunner);
+        DontDestroyOnLoad(common);
+
+        var gameStateMachine = new GameStateMachine(resourcesLocator, inputController);
         gameStateMachine.EnterState<BootstrapGameState>();
     }
 }

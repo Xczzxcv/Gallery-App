@@ -21,6 +21,10 @@ MonoBehaviour:
     m_Address: white_pixel
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 7179f0cc2d4316d48aa8fd4b3936490b
+    m_Address: Gallery Image
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 37d5b444c3c104c41b14526c9bc41d96, type: 2}
   m_SchemaSet:

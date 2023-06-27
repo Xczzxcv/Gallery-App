@@ -1,20 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 
-internal class GalleryImagesProvider : MonoBehaviour
+internal class GalleryImagesProvider : MonoBehaviour, IGalleryImagesProvider
 {
-    public delegate void ImageLoadedCallback(Sprite sprite);
-
     private struct ImageLoadInfo
     {
         public UnityWebRequestAsyncOperation AsyncOperation;
         public List<ImageLoadedCallback> Callbacks;
     }
-    
+
     private readonly Dictionary<string, Sprite> _images = new();
     private readonly Dictionary<string, ImageLoadInfo> _loadImagesInfos = new();
-    private readonly List<string> _processedImageLoads = new();
 
     public void GetImage(string imageUrl, ImageLoadedCallback imgCallback)
     {
@@ -41,24 +39,15 @@ internal class GalleryImagesProvider : MonoBehaviour
 
     private void Update()
     {
-        foreach (var (imageUrl, imageLoadInfo) in _loadImagesInfos)
+        var (imageUrl, imageLoadInfo)  = _loadImagesInfos.FirstOrDefault(pair => 
+            pair.Value.AsyncOperation.webRequest.isDone);
+        if (imageUrl is null)
         {
-            var webRequest = imageLoadInfo.AsyncOperation.webRequest;
-            if (!webRequest.isDone)
-            {
-                continue;
-            }
-
-            ProcessImgLoad(webRequest, imageLoadInfo, imageUrl);
-            break;
+            return;
         }
 
-        foreach (var imageUrl in _processedImageLoads)
-        {
-            _loadImagesInfos.Remove(imageUrl);
-        }
-
-        _processedImageLoads.Clear();
+        ProcessImgLoad(imageLoadInfo.AsyncOperation.webRequest, imageLoadInfo, imageUrl);
+        _loadImagesInfos.Remove(imageUrl);
     }
 
     private void ProcessImgLoad(UnityWebRequest webRequest, ImageLoadInfo imageLoadInfo, string imageUrl)
@@ -76,11 +65,11 @@ internal class GalleryImagesProvider : MonoBehaviour
             extrude,
             SpriteMeshType.FullRect
         );
+        _images.Add(imageUrl, sprite);
+
         foreach (var imgLoadedCallback in imageLoadInfo.Callbacks)
         {
             imgLoadedCallback?.Invoke(sprite);
         }
-
-        _processedImageLoads.Add(imageUrl);
     }
-} 
+}

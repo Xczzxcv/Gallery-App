@@ -6,4 +6,6 @@ internal class GallerySceneLocator : MonoBehaviour
     public GalleryUiController GalleryUiController { get; private set; }
     [field: SerializeField]
     public GalleryImagesProvider GalleryImagesProvider { get; private set; }
+    [field: SerializeField]
+    public GalleryImagesFactory GalleryImagesFactory { get; private set; }
 }

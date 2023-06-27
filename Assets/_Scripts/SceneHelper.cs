@@ -4,24 +4,23 @@ using UnityEngine.SceneManagement;
 
 internal static class SceneHelper
 {
-    public static T GetRootComponent<T>() where T : Component
+    public static T GetRootComponent<T>(Scene scene = default) where T : Component
     {
-        var rootObjects = SceneManager.GetActiveScene().GetRootGameObjects();
-        
-        T resultComponent = null;
+        if (scene == default)
+        {
+            scene = SceneManager.GetActiveScene();
+        }
+
+        var rootObjects = scene.GetRootGameObjects();
+
         foreach (var rootObject in rootObjects)
         {
-            if (rootObject.TryGetComponent(out resultComponent))
+            if (rootObject.TryGetComponent(out T resultComponent))
             {
-                break;
+                return resultComponent;
             }
         }
 
-        if (!resultComponent)
-        {
-            throw new Exception($"Can't find {nameof(resultComponent)}");
-        }
-
-        return resultComponent;
+        throw new Exception($"Can't find {nameof(T)}");
     }
 }

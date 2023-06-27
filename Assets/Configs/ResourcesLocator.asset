@@ -22,3 +22,13 @@ MonoBehaviour:
     m_SubObjectName: 
     m_SubObjectType: 
     m_EditorAssetChanged: 0
+  <ViewSceneAsset>k__BackingField:
+    m_AssetGUID: ce23080022088d24ead800c2ba2de056
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
+  <LoadingSceneAsset>k__BackingField:
+    m_AssetGUID: 38b675478ce0f544eb971ac152709cfd
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Infrastructure.GameStates;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -6,42 +7,29 @@ using UnityEngine.UI;
 internal class GalleryUiController : UIBehaviour
 {
     [SerializeField]
-    private GalleryImage galleryImagePrefab;
-
-    [SerializeField]
-    private RectTransform parentObject;
-
+    private RectTransform imagesParentObject;
     [SerializeField]
     private GridLayoutGroup grid;
-
     [SerializeField]
     private ScrollRect scrollRect;
-
+    [SerializeField]
+    private RectTransform rootObject;
     [SerializeField]
     private bool width;
-
-    [field: SerializeField]
-    private float CellSize { get; set; }
+    [SerializeField]
+    private float cellSizeCft;
 
     private readonly List<GalleryImage> _images = new();
     private readonly Vector3[] _fourCornersArray = new Vector3[4];
-    private GalleryImagesProvider _galleryImagesProvider;
+    private IGalleryImagesProvider _galleryImagesProvider;
+    private IGalleryImagesFactory _galleryImagesFactory;
     private bool _needUpdate;
+    private GameStateMachine _gameStateMachine;
 
     protected override void Awake()
     {
         scrollRect.onValueChanged.AddListener(OnScrollChanged);
         UpdateCellSize();
-    }
-
-    public void Init(GalleryImagesProvider galleryImagesProvider)
-    {
-        _galleryImagesProvider = galleryImagesProvider;
-    }
-
-    private void OnScrollChanged(Vector2 arg0)
-    {
-        _needUpdate = true;
     }
 
     private void LateUpdate()
@@ -53,9 +41,41 @@ internal class GalleryUiController : UIBehaviour
         }
     }
 
+    public void Init(IGalleryImagesProvider galleryImagesProvider,
+        IGalleryImagesFactory galleryImagesFactory,
+        GameStateMachine gameStateMachine)
+    {
+        _galleryImagesProvider = galleryImagesProvider;
+        _galleryImagesFactory = galleryImagesFactory;
+        _gameStateMachine = gameStateMachine;
+    }
+
+    public void Show()
+    {
+        rootObject.gameObject.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        rootObject.gameObject.SetActive(false);
+    }
+
+    public void AddImage(string imageUrl)
+    {
+        var galleryImage = _galleryImagesFactory.Create(imageUrl, imagesParentObject);
+        galleryImage.ImgClick += OnGalleryImageClick;
+        _images.Add(galleryImage);
+        _needUpdate = true;
+    }
+
+    private void OnScrollChanged(Vector2 _)
+    {
+        _needUpdate = true;
+    }
+
     private void UpdateCellsVisibility()
     {
-        LayoutRebuilder.ForceRebuildLayoutImmediate(parentObject);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(imagesParentObject);
         foreach (var galleryImage in _images)
         {
             ProcessImage(galleryImage);
@@ -74,32 +94,34 @@ internal class GalleryUiController : UIBehaviour
         Debug.Log($"Seen img {galleryImage.ImageUrl}");
     }
 
-    protected override void OnRectTransformDimensionsChange()
-    {
-        UpdateCellSize();
-    }
-
     private bool IsVisible(GalleryImage galleryImage)
     {
         galleryImage.RectTransform.GetWorldCorners(_fourCornersArray);
-        var isVisible1 = RectTransformUtility.RectangleContainsScreenPoint(scrollRect.viewport, _fourCornersArray[0]);
-        var isVisible2 = RectTransformUtility.RectangleContainsScreenPoint(scrollRect.viewport, _fourCornersArray[2]);
-        return isVisible1 || isVisible2;
+        var isVisibleBottomLeftCorner = RectTransformUtility.RectangleContainsScreenPoint(
+            scrollRect.viewport, _fourCornersArray[0]);
+        if (isVisibleBottomLeftCorner)
+        {
+            return true;
+        }
+
+        var isVisibleTopRightCorner = RectTransformUtility.RectangleContainsScreenPoint(
+            scrollRect.viewport, _fourCornersArray[2]);
+        return isVisibleTopRightCorner;
     }
 
     private void UpdateCellSize()
     {
         var cellSize = width
-            ? Screen.width * CellSize
-            : Screen.height * CellSize;
+            ? Screen.width * cellSizeCft
+            : Screen.height * cellSizeCft;
         grid.cellSize = Vector2.one * cellSize;
     }
 
-    public void AddImage(string imageUrl)
+    private void OnGalleryImageClick(GalleryImage clickedImage)
     {
-        var galleryImage = Instantiate(galleryImagePrefab, parentObject);
-        galleryImage.Setup(imageUrl);
-        _images.Add(galleryImage);
-        _needUpdate = true;
+        _gameStateMachine.EnterStateWithArgs<ViewGameState, ViewGameState.Args>(new ViewGameState.Args
+        {
+            GalleryImage = clickedImage,
+        });
     }
 }

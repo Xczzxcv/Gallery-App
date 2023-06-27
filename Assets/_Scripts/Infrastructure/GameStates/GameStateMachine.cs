@@ -9,13 +9,13 @@ internal class GameStateMachine : IStateMachine
     private readonly Dictionary<Type, IStateBase> _states = new ();
     private IStateBase _currentState;
 
-    public GameStateMachine(ResourcesLocator resourcesLocator, ICoroutineRunner coroutineRunner)
+    public GameStateMachine(ResourcesLocator resourcesLocator, IInputProvider inputProvider)
     {
         AddState(new BootstrapGameState(this));
         AddState(new MenuGameState(this, resourcesLocator));
-        AddState(new LoadSceneGameState());
-        AddState(new GalleryGameState(this, coroutineRunner));
-        AddState(new ViewGameState());
+        AddState(new LoadSceneGameState(resourcesLocator));
+        AddState(new GalleryGameState(this));
+        AddState(new ViewGameState(this, resourcesLocator, inputProvider));
     }
 
     private void AddState(IStateBase state)

@@ -1,14 +1,5 @@
 ﻿using System;
-using UnityEditor;
 using UnityEngine.AddressableAssets;
-using UnityEngine.SceneManagement;
-
-[Serializable]
-public class SceneAssetReference : AssetReferenceT<SceneAsset>
-{
-    public SceneAssetReference(string guid) : base(guid)
-    { }
-}
 
 namespace Infrastructure.GameStates
 {
@@ -16,19 +7,28 @@ internal class LoadSceneGameState : IStateWithArgs<LoadSceneGameState.Args>
 {
     public struct Args
     {
-        public SceneAssetReference SceneToLoad;
+        public AssetReference SceneToLoad;
         public Action Callback;
+    }
+
+    private readonly ResourcesLocator _resourcesLocator;
+
+    public LoadSceneGameState(ResourcesLocator resourcesLocator)
+    {
+        _resourcesLocator = resourcesLocator;
     }
     
     public async void Enter(Args args)
     {
-        var currentScene = SceneManager.GetActiveScene();
-        var sceneInstance = await args.SceneToLoad.LoadSceneAsync().Task;
-        args.Callback?.Invoke();
-        SceneManager.SetActiveScene(sceneInstance.Scene);
+        var loadingSceneHandle = _resourcesLocator.LoadingSceneAsset.LoadSceneAsync();
+        await loadingSceneHandle.Task;
+        var loadingSceneLocator = SceneHelper.GetRootComponent<LoadingSceneLocator>();
+        loadingSceneLocator.LoadingController.Load(args.SceneToLoad, args.Callback);
     }
 
     public void Exit()
-    { }
+    {
+        _resourcesLocator.LoadingSceneAsset.UnLoadScene();
+    }
 }
 }
